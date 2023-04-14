@@ -260,7 +260,7 @@ class TestConduit(object):
 
         article_title.send_keys(article_title_1)
         about.send_keys(about_1)
-        article_text.send_keys(article_title_1)
+        article_text.send_keys(article_text_1)
         tag.send_keys(tag_1)
         article_text.click()
         publish_btn.click()
