@@ -14,9 +14,6 @@ email = 'klingonuser@klingonmail.com'
 jelszo = 'Kl1Ngon$'
 
 
-
-
-
 class TestConduit(object):
 
     def setup_method(self):
@@ -242,10 +239,6 @@ class TestConduit(object):
         TestConduit.login(self)
 
         time.sleep(5)
-        sign_in_btn = self.browser.find_element(By.XPATH, '//*[@id="app"]/div/div/div/div/form/button')
-        sign_in_btn.click()
-
-        time.sleep(5)
         new_article_link = self.browser.find_element(By.XPATH, '//a[@href="#/editor"]')
         new_article_link.click()
         WebDriverWait(self.browser, 3).until(EC.url_to_be('http://localhost:1667/#/editor'))
@@ -347,7 +340,7 @@ class TestConduit(object):
         comment_pieces = len(comments)
         assert comment_pieces != 0
 
-# kilépés funkció ellenőrzése:
+    # kilépés funkció ellenőrzése:
 
     def test_log_out(self):
         TestConduit.login(self)
@@ -360,11 +353,11 @@ class TestConduit(object):
             EC.presence_of_element_located((By.XPATH, '//a[@href="#/login"]')))
         assert sign_in_page_button.is_displayed()
 
-# adatbevitel fájlból:
+    # adatbevitel fájlból:
     def test_source(self):
         self.login()
 
-        path = r"https://github.com/gergelycs/conduit/blob/master/Vizsgaremek/alapanyag.csv"
+        path = r"//Vizsgaremek/alapanyag.csv"
         time.sleep(4)
 
         with open(path, 'r', encoding='utf-8') as alapanyag:
@@ -377,7 +370,7 @@ class TestConduit(object):
                 article_title = self.browser.find_element(By.CLASS_NAME, 'form-control-lg')
                 about = self.browser.find_element(By.CSS_SELECTOR, 'input[placeholder="What\'s this article about?"]')
                 write = self.browser.find_element(By.CSS_SELECTOR,
-                                             'textarea[placeholder="Write your article (in markdown)"]')
+                                                  'textarea[placeholder="Write your article (in markdown)"]')
                 tag = self.browser.find_element(By.CSS_SELECTOR, 'input[placeholder="Enter tags"]')
                 publish = self.browser.find_element(By.CLASS_NAME, 'btn-primary')
                 article_title.send_keys(alapanyag[0])
@@ -391,24 +384,10 @@ class TestConduit(object):
                 home = self.browser.find_element(By.CSS_SELECTOR, 'a[href="#/"]')
                 home.click()
 
-# adat mentése fájlba:
+    # adat mentése fájlba:
 
     def test_save(self):
-        sign_in_page_button = self.browser.find_element(By.XPATH, '//a[@href="#/login"]')
-        sign_in_page_button.click()
-
-        email_input = self.browser.find_element(By.XPATH, '//input[@placeholder="Email"]')
-        email_input.send_keys('klingonuser@klingonmail.com')
-        password_input = self.browser.find_element(By.XPATH, '//input[@placeholder="Password"]')
-        password_input.send_keys('Kl1Ngon$')
-
-        sign_in_button = WebDriverWait(self.browser, 5).until(
-            EC.presence_of_element_located((By.XPATH, '//button[@class="btn btn-lg btn-primary pull-xs-right"]')))
-        sign_in_button.click()
-
-        your_feed = WebDriverWait(self.browser, 5).until(
-            EC.presence_of_element_located((By.XPATH, '//a[@class="nav-link router-link-exact-active active"]')))
-        assert your_feed.is_displayed()
+        self.login()
 
         tag_list = WebDriverWait(self.browser, 5).until(EC.presence_of_all_elements_located(
             (By.XPATH, '//div[@class="sidebar"]/div/a[@class="tag-pill tag-default"]')))
@@ -419,6 +398,3 @@ class TestConduit(object):
         with open('save.txt', 'r') as file:
             first_row = file.readline().rstrip('\n')
             assert first_row == tag_list[0].text
-
-
-
