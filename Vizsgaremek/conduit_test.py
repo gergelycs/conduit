@@ -233,7 +233,50 @@ class TestConduit(object):
         assert actual_tags.text == 'meséje'
 
     # Bejegyzés adatainak módosítása,
+    def test_article_edit(self):
+        TestConduit.login(self)
 
+        time.sleep(5)
+        new_article_link = self.browser.find_element(By.XPATH, '//a[@href="#/editor"]')
+        new_article_link.click()
+        WebDriverWait(self.browser, 3).until(EC.url_to_be('http://localhost:1667/#/editor'))
+        article_title = self.browser.find_element(By.XPATH, '//input[@placeholder="Article Title"]')
+        about = self.browser.find_element(By.XPATH, '//input[@placeholder="What\'s this article about?"]')
+        article_text = self.browser.find_element(By.XPATH,
+                                                 '//textarea[@placeholder="Write your article (in markdown)"]')
+        tag = self.browser.find_element(By.CSS_SELECTOR, 'input.ti-new-tag-input')
+        publish_btn = self.browser.find_element(By.XPATH, '//button[@type="submit"]')
+
+        article_title.send_keys('bogyó')
+        about.send_keys('és')
+        article_text.send_keys('babóca')
+        tag.send_keys('meséje')
+        article_text.click()
+        publish_btn.click()
+
+        time.sleep(5)
+        actual_article_title = self.browser.find_element(By.CSS_SELECTOR, 'h1')
+        assert actual_article_title.text == 'bogyó'
+        actual_author = self.browser.find_element(By.CSS_SELECTOR, '.article-meta .author')
+        assert actual_author.text == username
+        actual_article_content = self.browser.find_element(By.CSS_SELECTOR, '.article-content div div')
+        assert actual_article_content.text == 'babóca'
+        actual_tags = self.browser.find_element(By.CSS_SELECTOR, '.article-content .tag-list')
+        assert actual_tags.text == 'meséje'
+
+        edit_article = self.browser.find_element(By.XPATH, '//*[@id="app"]/div/div[1]/div/div/span/a/span')
+        edit_article.click()
+        time.sleep(3)
+        article_title.clear()
+        article_title.send_keys('hetedhet orszag')
+        article_text.clear()
+        article_text.send_keys('krisztoforo')
+        tag.clear()
+        tag.send_keys('treffhetes')
+        article_text.click()
+        publish_btn.click()
+        home = self.browser.find_element(By.CSS_SELECTOR, 'a[href="#/"]')
+        home.click()
     # Bejegyzés törlése
     def test_article_delete(self):
         TestConduit.login(self)
