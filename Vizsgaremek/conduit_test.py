@@ -14,7 +14,7 @@ username = 'klingonuser'
 email = 'klingonuser@klingonmail.com'
 jelszo = 'Kl1Ngon$'
 
-article_title_1 = 'bogyo'
+article_title_1 = 'bogyó'
 about_1 = "és"
 article_text_1 = 'babóca'
 tag_1 = 'meséje'
