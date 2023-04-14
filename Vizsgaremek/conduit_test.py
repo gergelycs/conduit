@@ -358,7 +358,7 @@ class TestConduit(object):
     def test_source(self):
         self.login()
 
-        path = r"\\Vizsgaremek/alapanyag.csv"
+        path = r"Vizsgaremek/alapanyag.csv"
         time.sleep(4)
 
         with open(path, 'r', encoding='utf-8') as alapanyag:
