@@ -42,9 +42,9 @@ class TestConduit(object):
         sign_in_page_button.click()
 
         email_input = self.browser.find_element(By.XPATH, '//input[@placeholder="Email"]')
-        email_input.send_keys('klingonuser@klingonmail.com')
+        email_input.send_keys(email)
         password_input = self.browser.find_element(By.XPATH, '//input[@placeholder="Password"]')
-        password_input.send_keys('Kl1Ngon$')
+        password_input.send_keys(jelszo)
 
         sign_in_button = WebDriverWait(self.browser, 5).until(
             EC.presence_of_element_located((By.XPATH, '//button[@class="btn btn-lg btn-primary pull-xs-right"]')))
@@ -90,9 +90,9 @@ class TestConduit(object):
         email_input = self.browser.find_element(By.XPATH, '//input[@placeholder="Email"]')
         password_input = self.browser.find_element(By.XPATH, '//input[@placeholder="Password"]')
 
-        username_input.send_keys('klingonuser')
+        username_input.send_keys(username)
         email_input.send_keys('test@')
-        password_input.send_keys('Kl1Ngon$')
+        password_input.send_keys(jelszo)
 
         sign_up_button2 = self.browser.find_element(By.XPATH, '//button[@class="btn btn-lg btn-primary pull-xs-right"]')
         sign_up_button2.click()
@@ -159,7 +159,7 @@ class TestConduit(object):
         sing_in_page_button = self.browser.find_element(By.XPATH, '//a[@href="#/login"]')
         sing_in_page_button.click()
         email_input = self.browser.find_element(By.XPATH, '//input[@placeholder="Email"]')
-        email_input.send_keys('klingonuser@klingonmail.com')
+        email_input.send_keys(email)
         password_input = self.browser.find_element(By.XPATH, '//input[@placeholder="Password"]')
         password_input.send_keys('nemjójelsz0')
 
@@ -181,20 +181,7 @@ class TestConduit(object):
 
     # Global Feed oldalainak végigjárása
     def test_page_number(self):
-        sign_in_page_button = self.browser.find_element(By.XPATH, '//a[@href="#/login"]')
-        sign_in_page_button.click()
-
-        email_input = self.browser.find_element(By.XPATH, '//input[@placeholder="Email"]')
-        email_input.send_keys('klingonuser@klingonmail.com')
-        password_input = self.browser.find_element(By.XPATH, '//input[@placeholder="Password"]')
-        password_input.send_keys('Kl1Ngon$')
-        time.sleep(5)
-        sign_in_btn = self.browser.find_element(By.XPATH, '//*[@id="app"]/div/div/div/div/form/button')
-        sign_in_btn.click()
-
-        your_feed = WebDriverWait(self.browser, 5).until(
-            EC.presence_of_element_located((By.XPATH, '//a[@class="nav-link router-link-exact-active active"]')))
-        assert your_feed.is_displayed()
+        TestConduit.login(self)
 
         page_numbers_list = WebDriverWait(self.browser, 5).until(
             EC.presence_of_all_elements_located((By.XPATH, '//a[@class="page-link"]')))
@@ -206,21 +193,7 @@ class TestConduit(object):
 
     # Szűkített tag alapú lista bejárás
     def test_tags(self):
-        sign_in_page_button = self.browser.find_element(By.XPATH, '//a[@href="#/login"]')
-        sign_in_page_button.click()
-
-        email_input = self.browser.find_element(By.XPATH, '//input[@placeholder="Email"]')
-        email_input.send_keys('klingonuser@klingonmail.com')
-        password_input = self.browser.find_element(By.XPATH, '//input[@placeholder="Password"]')
-        password_input.send_keys('Kl1Ngon$')
-
-        sign_in_button = WebDriverWait(self.browser, 5).until(
-            EC.presence_of_element_located((By.XPATH, '//button[@class="btn btn-lg btn-primary pull-xs-right"]')))
-        sign_in_button.click()
-
-        your_feed = WebDriverWait(self.browser, 5).until(
-            EC.presence_of_element_located((By.XPATH, '//a[@class="nav-link router-link-exact-active active"]')))
-        assert your_feed.is_displayed()
+        TestConduit.login(self)
 
         lorem_tag = WebDriverWait(self.browser, 5).until(EC.presence_of_element_located(
             (By.XPATH, '//div[@class="sidebar"]/div[@class="tag-list"]/a[@href="#/tag/lorem"]')))
@@ -232,17 +205,7 @@ class TestConduit(object):
 
     # Bejegyzés létrehozása, adatbevitel ellenőrzése
     def test_article_create1(self):
-        sign_in_page_button = self.browser.find_element(By.XPATH, '//a[@href="#/login"]')
-        sign_in_page_button.click()
-
-        email_input = self.browser.find_element(By.XPATH, '//input[@placeholder="Email"]')
-        email_input.send_keys('klingonuser@klingonmail.com')
-        password_input = self.browser.find_element(By.XPATH, '//input[@placeholder="Password"]')
-        password_input.send_keys('Kl1Ngon$')
-
-        time.sleep(5)
-        sign_in_btn = self.browser.find_element(By.XPATH, '//*[@id="app"]/div/div/div/div/form/button')
-        sign_in_btn.click()
+        TestConduit.login(self)
 
         time.sleep(5)
         new_article_link = self.browser.find_element(By.XPATH, '//a[@href="#/editor"]')
@@ -276,13 +239,7 @@ class TestConduit(object):
 
     # Bejegyzés törlése
     def test_article_delete(self):
-        sign_in_page_button = self.browser.find_element(By.XPATH, '//a[@href="#/login"]')
-        sign_in_page_button.click()
-
-        email_input = self.browser.find_element(By.XPATH, '//input[@placeholder="Email"]')
-        email_input.send_keys('klingonuser@klingonmail.com')
-        password_input = self.browser.find_element(By.XPATH, '//input[@placeholder="Password"]')
-        password_input.send_keys('Kl1Ngon$')
+        TestConduit.login(self)
 
         time.sleep(5)
         sign_in_btn = self.browser.find_element(By.XPATH, '//*[@id="app"]/div/div/div/div/form/button')
@@ -317,17 +274,7 @@ class TestConduit(object):
 
     # Komment hozzáadása, új adatbevitel ellenőrzése
     def test_comment_create(self):
-        sign_in_page_button = self.browser.find_element(By.XPATH, '//a[@href="#/login"]')
-        sign_in_page_button.click()
-
-        email_input = self.browser.find_element(By.XPATH, '//input[@placeholder="Email"]')
-        email_input.send_keys('klingonuser@klingonmail.com')
-        password_input = self.browser.find_element(By.XPATH, '//input[@placeholder="Password"]')
-        password_input.send_keys('Kl1Ngon$')
-
-        time.sleep(5)
-        sign_in_btn = self.browser.find_element(By.XPATH, '//*[@id="app"]/div/div/div/div/form/button')
-        sign_in_btn.click()
+        TestConduit.login(self)
 
         time.sleep(5)
         new_article_link = self.browser.find_element(By.XPATH, '//a[@href="#/editor"]')
@@ -360,17 +307,7 @@ class TestConduit(object):
 
     #  Komment törlése funkció ellenőrzése
     def test_comment_delete(self):
-        sign_in_page_button = self.browser.find_element(By.XPATH, '//a[@href="#/login"]')
-        sign_in_page_button.click()
-
-        email_input = self.browser.find_element(By.XPATH, '//input[@placeholder="Email"]')
-        email_input.send_keys('klingonuser@klingonmail.com')
-        password_input = self.browser.find_element(By.XPATH, '//input[@placeholder="Password"]')
-        password_input.send_keys('Kl1Ngon$')
-
-        time.sleep(5)
-        sign_in_btn = self.browser.find_element(By.XPATH, '//*[@id="app"]/div/div/div/div/form/button')
-        sign_in_btn.click()
+        TestConduit.login(self)
 
         time.sleep(5)
         new_article_link = self.browser.find_element(By.XPATH, '//a[@href="#/editor"]')
@@ -413,20 +350,7 @@ class TestConduit(object):
 # kilépés funkció ellenőrzése:
 
     def test_log_out(self):
-        URL = "http://localhost:1667/#/"
-        self.browser.get(URL)
-        self.browser.maximize_window()
-        elfogad = self.browser.find_element(By.XPATH, '//*[@id="cookie-policy-panel"]/div/div[2]/button[2]/div')
-        elfogad.click()
-        sign_in = self.browser.find_element(By.XPATH, '//*[@id="app"]/nav/div/ul/li[2]/a')
-        sign_in.click()
-
-        sign_in_email = self.browser.find_element(By.XPATH, '//*[@id="app"]/div/div/div/div/form/fieldset[1]/input')
-        sign_in_email.send_keys('klingonuser@klingonmail.com')
-        sign_in_password = self.browser.find_element(By.XPATH, '//*[@id="app"]/div/div/div/div/form/fieldset[2]/input')
-        sign_in_password.send_keys('Kl1Ngon$')
-        sign_in_btn = self.browser.find_element(By.XPATH, '//*[@id="app"]/div/div/div/div/form/button')
-        sign_in_btn.click()
+        TestConduit.login(self)
 
         self.browser.implicitly_wait(time_to_wait=2)
         log_out = self.browser.find_element(By.XPATH, '//*[@id="app"]/nav/div/ul/li[5]/a')
@@ -439,23 +363,8 @@ class TestConduit(object):
 # adatbevitel fájlból:
     def test_source(self):
         self.login()
-        #sign_in_page_button = self.browser.find_element(By.XPATH, '//a[@href="#/login"]')
-        #sign_in_page_button.click()
 
-        #email_input = self.browser.find_element(By.XPATH, '//input[@placeholder="Email"]')
-        #email_input.send_keys('klingonuser@klingonmail.com')
-        #password_input = self.browser.find_element(By.XPATH, '//input[@placeholder="Password"]')
-        #password_input.send_keys('Kl1Ngon$')
-
-        #sign_in_button = WebDriverWait(self.browser, 5).until(
-        #    EC.presence_of_element_located((By.XPATH, '//button[@class="btn btn-lg btn-primary pull-xs-right"]')))
-        #sign_in_button.click()
-
-        #your_feed = WebDriverWait(self.browser, 5).until(
-        #    EC.presence_of_element_located((By.XPATH, '//a[@class="nav-link router-link-exact-active active"]')))
-        #assert your_feed.is_displayed()
-        #path = r"/CONDUIT/alapanyag.csv"
-        path = r"C:\Users\Kazu\PycharmProjects\python-presentation\CONDUIT\alapanyag.csv"
+        path = r"https://github.com/gergelycs/conduit/blob/master/Vizsgaremek/alapanyag.csv"
         time.sleep(4)
 
         with open(path, 'r', encoding='utf-8') as alapanyag:
