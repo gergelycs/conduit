@@ -241,6 +241,7 @@ class TestConduit(object):
         time.sleep(5)
         new_article_link = self.browser.find_element(By.XPATH, '//a[@href="#/editor"]')
         new_article_link.click()
+        time.sleep(3)
         WebDriverWait(self.browser, 3).until(EC.url_to_be('http://localhost:1667/#/editor'))
         article_title = self.browser.find_element(By.XPATH, '//input[@placeholder="Article Title"]')
         about = self.browser.find_element(By.XPATH, '//input[@placeholder="What\'s this article about?"]')
@@ -248,14 +249,14 @@ class TestConduit(object):
                                                  '//textarea[@placeholder="Write your article (in markdown)"]')
         tag = self.browser.find_element(By.CSS_SELECTOR, 'input.ti-new-tag-input')
         publish_btn = self.browser.find_element(By.XPATH, '//button[@type="submit"]')
-
+        time.sleep(3)
         article_title.send_keys('bogyó')
         about.send_keys('és')
         article_text.send_keys('babóca')
         tag.send_keys('meséje')
         article_text.click()
         publish_btn.click()
-
+        time.sleep(3)
         article_url = self.browser.current_url
         delete_article_button = WebDriverWait(self.browser, 10).until(
             EC.presence_of_element_located((By.XPATH, '//i[@class="ion-trash-a"]')))
@@ -357,7 +358,7 @@ class TestConduit(object):
     def test_source(self):
         self.login()
 
-        path = r"//Vizsgaremek/alapanyag.csv"
+        path = r"\\Vizsgaremek/alapanyag.csv"
         time.sleep(4)
 
         with open(path, 'r', encoding='utf-8') as alapanyag:
@@ -378,7 +379,7 @@ class TestConduit(object):
                 write.send_keys(alapanyag[2])
                 tag.send_keys(alapanyag[3])
                 publish.click()
-                time.sleep(3)
+                time.sleep(5)
                 published = self.browser.find_element(By.XPATH, '//*[@id="app"]/div/div[1]/div/h1').text
                 assert published == alapanyag[0]
                 home = self.browser.find_element(By.CSS_SELECTOR, 'a[href="#/"]')
