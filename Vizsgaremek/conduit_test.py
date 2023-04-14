@@ -399,3 +399,62 @@ class TestConduit(object):
         with open('save.txt', 'r') as file:
             first_row = file.readline().rstrip('\n')
             assert first_row == tag_list[0].text
+    def test_tobszoros_adatbevitel(self):
+        self.login()
+        path = r"Vizsgaremek/alapanyag.csv"
+        with open(path, 'r', encoding='utf-8') as alapanyag:
+            alap_reader = csv.reader(alapanyag, delimiter=',')
+
+            for alapanyag in alap_reader:
+                time.sleep(2)
+                new_article_link = self.browser.find_element(By.XPATH, '//*[@id="app"]/nav/div/ul/li[2]/a')
+                new_article_link.click()
+                time.sleep(2)
+                article_title = self.browser.find_element(By.CLASS_NAME, 'form-control-lg')
+                about = self.browser.find_element(By.CSS_SELECTOR, 'input[placeholder="What\'s this article about?"]')
+                write = self.browser.find_element(By.CSS_SELECTOR,
+                                             'textarea[placeholder="Write your article (in markdown)"]')
+                tag = self.browser.find_element(By.CSS_SELECTOR, 'input[placeholder="Enter tags"]')
+                publish = self.browser.find_element(By.CLASS_NAME, 'btn-primary')
+                article_title.send_keys(alapanyag[0])
+                about.send_keys(alapanyag[1])
+                write.send_keys(alapanyag[2])
+                tag.send_keys(alapanyag[3])
+                publish.click()
+                time.sleep(3)
+                published = self.browser.find_element(By.XPATH, '//*[@id="app"]/div/div[1]/div/h1').text
+                assert published == alapanyag[0]
+
+                comment_input = WebDriverWait(self.browser, 10).until(
+                    EC.presence_of_element_located((By.XPATH, '//textarea[@placeholder="Write a comment..."]')))
+                comment_input.send_keys(alapanyag[2])
+                post_comment_button = self.browser.find_element(By.XPATH, '//button[@class="btn btn-sm btn-primary"]')
+                post_comment_button.click()
+                time.sleep(4)
+                comment_input.send_keys(alapanyag[3])
+                post_comment_button = self.browser.find_element(By.XPATH, '//button[@class="btn btn-sm btn-primary"]')
+                post_comment_button.click()
+
+        time.sleep(6)
+
+        path = r"Vizsgaremek/alapanyag.csv"
+        time.sleep(4)
+        # a megnyitott fájlt soronként commenteljük
+
+        with open(path, "r") as soronkent:
+            tartalom = soronkent.readlines()
+            for sor in tartalom:
+                sor = sor.rstrip()  # sorvége-jel eltávolítása
+                print(sor)
+
+        comment_input = WebDriverWait(self.browser, 10).until(
+            EC.presence_of_element_located((By.XPATH, '//textarea[@placeholder="Write a comment..."]')))
+        comment_input.send_keys(sor)
+        post_comment_button = self.browser.find_element(By.XPATH, '//button[@class="btn btn-sm btn-primary"]')
+        post_comment_button.click()
+        time.sleep(4)
+        comment_input.send_keys(sor)
+        post_comment_button = self.browser.find_element(By.XPATH, '//button[@class="btn btn-sm btn-primary"]')
+        post_comment_button.click()
+        home = self.browser.find_element(By.CSS_SELECTOR, 'a[href="#/"]')
+        home.click()
