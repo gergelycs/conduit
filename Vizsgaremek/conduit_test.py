@@ -9,9 +9,20 @@ import time
 import csv
 
 # Változók:
+
 username = 'klingonuser'
 email = 'klingonuser@klingonmail.com'
 jelszo = 'Kl1Ngon$'
+
+article_title_1 = 'bogyo'
+about_1 = "és"
+article_text_1 = 'babóca'
+tag_1 = 'meséje'
+
+article_title_2 = 'hetedhet orszag'
+article_text_2 = 'krisztoforo'
+tag_2 = 'treffhetes'
+comment_input_1 = 'mikkamakka'
 
 
 class TestConduit(object):
@@ -215,22 +226,22 @@ class TestConduit(object):
         tag = self.browser.find_element(By.CSS_SELECTOR, 'input.ti-new-tag-input')
         publish_btn = self.browser.find_element(By.XPATH, '//button[@type="submit"]')
 
-        article_title.send_keys('bogyó')
-        about.send_keys('és')
-        article_text.send_keys('babóca')
-        tag.send_keys('meséje')
+        article_title.send_keys(article_title_1)
+        about.send_keys(about_1)
+        article_text.send_keys(article_text_1)
+        tag.send_keys(tag_1)
         article_text.click()
         publish_btn.click()
 
         time.sleep(5)
         actual_article_title = self.browser.find_element(By.CSS_SELECTOR, 'h1')
-        assert actual_article_title.text == 'bogyó'
+        assert actual_article_title.text == article_title_1
         actual_author = self.browser.find_element(By.CSS_SELECTOR, '.article-meta .author')
         assert actual_author.text == username
         actual_article_content = self.browser.find_element(By.CSS_SELECTOR, '.article-content div div')
-        assert actual_article_content.text == 'babóca'
+        assert actual_article_content.text == article_text_1
         actual_tags = self.browser.find_element(By.CSS_SELECTOR, '.article-content .tag-list')
-        assert actual_tags.text == 'meséje'
+        assert actual_tags.text == tag_1
 
     # Bejegyzés adatainak módosítása,
     def test_article_edit(self):
@@ -247,10 +258,10 @@ class TestConduit(object):
         tag = self.browser.find_element(By.CSS_SELECTOR, 'input.ti-new-tag-input')
         publish_btn = self.browser.find_element(By.XPATH, '//button[@type="submit"]')
 
-        article_title.send_keys('bogyó')
-        about.send_keys('és')
-        article_text.send_keys('babóca')
-        tag.send_keys('meséje')
+        article_title.send_keys(article_title_1)
+        about.send_keys(about_1)
+        article_text.send_keys(article_title_1)
+        tag.send_keys(tag_1)
         article_text.click()
         publish_btn.click()
 
@@ -268,15 +279,16 @@ class TestConduit(object):
         edit_article.click()
         time.sleep(3)
         article_title.clear()
-        article_title.send_keys('hetedhet orszag')
+        article_title.send_keys(article_title_2)
         article_text.clear()
-        article_text.send_keys('krisztoforo')
+        article_text.send_keys(article_text_2)
         tag.clear()
-        tag.send_keys('treffhetes')
+        tag.send_keys(tag_2)
         article_text.click()
         publish_btn.click()
         home = self.browser.find_element(By.CSS_SELECTOR, 'a[href="#/"]')
         home.click()
+
     # Bejegyzés törlése
     def test_article_delete(self):
         TestConduit.login(self)
@@ -324,16 +336,16 @@ class TestConduit(object):
         tag = self.browser.find_element(By.CSS_SELECTOR, 'input.ti-new-tag-input')
         publish_btn = self.browser.find_element(By.XPATH, '//button[@type="submit"]')
 
-        article_title.send_keys('bogyó')
-        about.send_keys('és')
-        article_text.send_keys('babóca')
-        tag.send_keys('meséje')
+        article_title.send_keys(article_title_1)
+        about.send_keys(about_1)
+        article_text.send_keys(article_text_1)
+        tag.send_keys(tag_1)
         article_text.click()
         publish_btn.click()
 
         comment_input = WebDriverWait(self.browser, 10).until(
             EC.presence_of_element_located((By.XPATH, '//textarea[@placeholder="Write a comment..."]')))
-        comment_input.send_keys('mikkamakka')
+        comment_input.send_keys(comment_input_1)
         post_comment_button = self.browser.find_element(By.XPATH, '//button[@class="btn btn-sm btn-primary"]')
         post_comment_button.click()
 
@@ -357,16 +369,16 @@ class TestConduit(object):
         tag = self.browser.find_element(By.CSS_SELECTOR, 'input.ti-new-tag-input')
         publish_btn = self.browser.find_element(By.XPATH, '//button[@type="submit"]')
 
-        article_title.send_keys('bogyó')
-        about.send_keys('és')
-        article_text.send_keys('babóca')
-        tag.send_keys('meséje')
+        article_title.send_keys(article_title_1)
+        about.send_keys(about_1)
+        article_text.send_keys(article_text_1)
+        tag.send_keys(tag_1)
         article_text.click()
         publish_btn.click()
 
         comment_input = WebDriverWait(self.browser, 10).until(
             EC.presence_of_element_located((By.XPATH, '//textarea[@placeholder="Write a comment..."]')))
-        comment_input.send_keys('mikkamakka')
+        comment_input.send_keys(comment_input_1)
         post_comment_button = self.browser.find_element(By.XPATH, '//button[@class="btn btn-sm btn-primary"]')
         post_comment_button.click()
 
@@ -442,6 +454,7 @@ class TestConduit(object):
         with open('save.txt', 'r') as file:
             first_row = file.readline().rstrip('\n')
             assert first_row == tag_list[0].text
+
     def test_tobszoros_adatbevitel(self):
         self.login()
         path = r"Vizsgaremek/alapanyag.csv"
@@ -456,7 +469,7 @@ class TestConduit(object):
                 article_title = self.browser.find_element(By.CLASS_NAME, 'form-control-lg')
                 about = self.browser.find_element(By.CSS_SELECTOR, 'input[placeholder="What\'s this article about?"]')
                 write = self.browser.find_element(By.CSS_SELECTOR,
-                                             'textarea[placeholder="Write your article (in markdown)"]')
+                                                  'textarea[placeholder="Write your article (in markdown)"]')
                 tag = self.browser.find_element(By.CSS_SELECTOR, 'input[placeholder="Enter tags"]')
                 publish = self.browser.find_element(By.CLASS_NAME, 'btn-primary')
                 article_title.send_keys(alapanyag[0])
